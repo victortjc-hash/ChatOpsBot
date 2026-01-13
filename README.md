@@ -58,7 +58,15 @@ Login into EC2 via SSH.
 
 - I installed stress tool - sudo yum install -y stress
 - I run the stress test - stress --cpu 2 --timeout 300
-- 
+- the test did not hit the 70% threshold so i modified the command to $ stress --cpu 1 --timeout 600
+- Results as expected, I received a bot message on Slack as well as Email Notification 
+
+<img width="949" height="741" alt="Screenshot 2026-01-13 at 2 40 56 PM" src="https://github.com/user-attachments/assets/5559cb8d-d86b-48fa-a00f-9b87c89924ba" />
+ <img width="1350" height="735" alt="Screenshot 2026-01-13 at 2 40 42 PM" src="https://github.com/user-attachments/assets/148fa23e-d613-45d3-a9d3-6366d83a5244" />
+
+Next, I will automate Operational Tasks from Slack (Lambda Integration).
+
+
 
 
 
