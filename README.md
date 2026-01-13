@@ -24,3 +24,19 @@ Alerts delivered to Slack for immediate visibility
 One-click fixes from Slack via Lambda or SSM
 IAM controls to ensure safe access
 Optional dashboard hosted via S3 + CloudFront
+
+1. Connect Slack with AWS Console.
+<img width="1890" height="746" alt="Screenshot 2026-01-13 at 9 44 41 AM" src="https://github.com/user-attachments/assets/66d5be19-9870-46f9-9732-435d077ed49e" />
+
+2. Create an SNS Topic for Slack Alerts
+
+3. Create a SNS Topic. 
+<img width="1899" height="725" alt="Screenshot 2026-01-13 at 9 55 00 AM" src="https://github.com/user-attachments/assets/de02ef4c-63d1-4d48-9e9b-c7a2eea6e44f" />
+
+4. Create an email subscription.
+<img width="1707" height="752" alt="Screenshot 2026-01-13 at 10 01 05 AM" src="https://github.com/user-attachments/assets/e2c95784-236d-41b2-9a31-04eefbc693b4" />
+
+5. Configure slack channel in Chatbot
+<img width="1878" height="644" alt="Screenshot 2026-01-13 at 10 20 52 AM" src="https://github.com/user-attachments/assets/00d171aa-d1e7-4cae-a7d4-5930218d884f" />
+
+5. 
