@@ -39,4 +39,26 @@ Optional dashboard hosted via S3 + CloudFront
 5. Configure slack channel in Chatbot
 <img width="1878" height="644" alt="Screenshot 2026-01-13 at 10 20 52 AM" src="https://github.com/user-attachments/assets/00d171aa-d1e7-4cae-a7d4-5930218d884f" />
 
-5. 
+6. Test Chatbox Integration
+<img width="1290" height="702" alt="Screenshot 2026-01-13 at 10 25 31 AM" src="https://github.com/user-attachments/assets/291f86a1-f36f-4b60-abbc-8bf77e761060" />
+
+Next - I will be creating a real time Cloudwatch Alerts in Slack.
+In this step, I will create a CloudWatch alarm that detects high CPU usage on an EC2 instance and sends real-time alerts to  Slack channel using the AWS Chatbot integration.
+
+Step 1. Launch a test EC2.
+<img width="1160" height="775" alt="Screenshot 2026-01-13 at 10 35 13 AM" src="https://github.com/user-attachments/assets/af723bbb-5493-47d3-b318-b8c3e7a1f028" />
+
+2. Create a cloudwatch alarm. CloudWatch will monitor CPU usage, and when it goes above a certain threshold, it will trigger an alert.
+<img width="1387" height="746" alt="Screenshot 2026-01-13 at 10 44 04 AM" src="https://github.com/user-attachments/assets/003305fc-b39d-48ca-94b0-031046c9270e" />
+
+3. Simulate a CPU spike.
+
+SSH into the EC2 instance to simulate the CPU spike:
+Login into EC2 via SSH. 
+
+- I installed stress tool - sudo yum install -y stress
+- I run the stress test - stress --cpu 2 --timeout 300
+- 
+
+
+
