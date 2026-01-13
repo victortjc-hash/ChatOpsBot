@@ -66,7 +66,109 @@ Login into EC2 via SSH.
 
 Next, I will automate Operational Tasks from Slack (Lambda Integration).
 
+1. Create a Lambda function with the following script:
+<img width="1358" height="780" alt="Screenshot 2026-01-13 at 2 52 52 PM" src="https://github.com/user-attachments/assets/5c0608c8-f428-437b-b412-0cf410df186f" />
 
+2. Add a policy to allow restart of Lambda:
+<img width="1551" height="744" alt="Screenshot 2026-01-13 at 2 55 17 PM" src="https://github.com/user-attachments/assets/b03102b9-5429-4f3c-95da-327d58fefdbd" />
 
+3. Invoke lambda function from Slack.
+ <img width="1445" height="846" alt="Screenshot 2026-01-13 at 3 20 26 PM" src="https://github.com/user-attachments/assets/b813581c-359c-4682-9202-a6f8a9c86995" />
 
+Next, I will deploy the Frontend Dashboard via CloudFormation
+I will demonstrates how to provision the ChatOpsBot frontend dashboard using CloudFormation, following the principles of Operational Excellence in the AWS Well-Architected Framework.
+Operational Excellence emphasizes automation, repeatability, and traceability. Using CloudFormation to deploy your frontend infrastructure ensures:
+
+Infrastructure is defined as code (IaC)
+Setups are consistent and auditable
+Rollbacks and updates are easier and safe
+
+Architecture Context
+This CloudFormation template provisions:
+
+An S3 bucket configured for static website hosting
+A CloudFront distribution with Origin Access Control (OAC) for secure access
+A bucket policy that grants CloudFront access to the bucket only via the OAC
+An output URL to access the dashboard globally
+
+Create a yaml file with following script
+
+```
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ChatOpsBot – Frontend Dashboard (S3 + CloudFront using OAC)
+
+Resources:
+
+  DashboardBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "chatops-frontend-${AWS::AccountId}-${AWS::Region}"
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: ChatOpsOAC
+        Description: Access control for CloudFront to access S3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+        OriginAccessControlOriginType: s3
+
+  DashboardDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        Origins:
+          - DomainName: !GetAtt DashboardBucket.RegionalDomainName
+            Id: S3Origin
+            S3OriginConfig: {}
+            OriginAccessControlId: !Ref CloudFrontOAC
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          CachedMethods: [GET, HEAD]
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref DashboardBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub "${DashboardBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${DashboardDistribution}"
+
+Outputs:
+  DashboardURL:
+    Description: CloudFront URL to access the frontend dashboard
+    Value: !Sub "<https://$>{DashboardDistribution.DomainName}"
+```
+Create a stack via cloudformation using  dashboard.yml
+<img width="1715" height="660" alt="Screenshot 2026-01-13 at 3 30 00 PM" src="https://github.com/user-attachments/assets/38094472-942b-4adf-9d53-44c34d1717a8" />
+Once stack is deployed, 
+<img width="1082" height="651" alt="Screenshot 2026-01-13 at 3 31 28 PM" src="https://github.com/user-attachments/assets/f5709328-d1c7-4d9b-934f-e6b0a287acfe" />
 
